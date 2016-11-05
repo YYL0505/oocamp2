@@ -1,5 +1,6 @@
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsSame.sameInstance;
@@ -52,5 +53,21 @@ public class ParkingLotTest {
         Integer nullToken = parkingLot.parking(car);
 
         assertNull(nullToken);
+    }
+
+    @Test
+    public void should__able_to_park_car_when_another_car_picked_given_parking_lot_is_full() {
+        ParkingLot parkingLot = new ParkingLot();
+
+        Integer token = null;
+        for (int i = 0; i < ParkingLot.Max_Capicity; i++) {
+            token = parkingLot.parking(new Car());
+        }
+        parkingLot.pick(token);
+
+        Car car = new Car();
+        Integer myToken = parkingLot.parking(car);
+
+        assertNotNull(myToken);
     }
 }

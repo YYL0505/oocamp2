@@ -15,11 +15,12 @@ public class ParkingLot {
         return count;
     }
 
-    public Car pick(int token) {
-        return cars.get(token);
+    public Car pick(Integer token) {
+        Car car = cars.get(token);
+        if (null != car) {
+            count--;
+        }
+        return car;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
 }
