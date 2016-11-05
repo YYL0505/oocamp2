@@ -70,4 +70,14 @@ public class ParkingLotTest {
 
         assertNotNull(myToken);
     }
+
+    @Test
+    public void should_not_able_to_pick_up_car_with_invalid_token() throws Exception {
+        ParkingLot parkingLot = new ParkingLot();
+
+        Integer token = parkingLot.parking(new Car());
+        Integer invalidTOken = token - 1;
+
+        assertNull(parkingLot.pick(invalidTOken));
+    }
 }
