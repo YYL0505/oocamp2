@@ -9,7 +9,7 @@ public class ParkingLotTest {
 
     @Test
     public void should_be_able_to_pick_up_car_when_parking_it() {
-        ParkingLot parkingLot = new ParkingLot();
+        ParkingLot parkingLot = new ParkingLot(100);
         Car car = new Car();
 
         int token = parkingLot.parking(car);
@@ -30,24 +30,21 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void should_able_to_pick_up_first_car_when_I_parking_another_car_given_there_is_a_car_in_parking_lot() {
+    public void should_able_to_pick_up_my_car_after_another_car_parking_given_there_is_a_car_in_parking_lot() {
         ParkingLot parkingLot = new ParkingLot();
-        Car existedCar = new Car();
-        int tokenOfExistedCar = parkingLot.parking(existedCar);
-
         Car myCar = new Car();
-        parkingLot.parking(myCar);
+        Integer myToken = parkingLot.parking(myCar);
 
-        assertThat(existedCar, sameInstance(parkingLot.pick(tokenOfExistedCar)));
+        Car anotherCar = new Car();
+
+        assertThat(myCar, sameInstance(parkingLot.pick(myToken)));
     }
 
     @Test
     public void should_not_able_to_park_car_when_the_parking_lot_is_full() {
-        ParkingLot parkingLot = new ParkingLot();
+        ParkingLot parkingLot = new ParkingLot(1);
 
-        for (int i = 0; i < ParkingLot.Max_Capicity; i++) {
-            parkingLot.parking(new Car());
-        }
+        parkingLot.parking(new Car());
 
         Car car = new Car();
         Integer nullToken = parkingLot.parking(car);
@@ -56,13 +53,26 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void should__able_to_park_car_when_another_car_picked_given_parking_lot_is_full() {
-        ParkingLot parkingLot = new ParkingLot();
+    public void should_not_able_to_park_car_when_lot_is_full_and_one_car_is_picked() {
+        ParkingLot parkingLot = new ParkingLot(1);
+
+        Car car = new Car();
+        Integer token = parkingLot.parking(car);
+        parkingLot.pick(token);
+
+        Car myCar = new Car();
+        Integer myToken = parkingLot.parking(myCar);
+
+        assertThat(myCar, sameInstance(parkingLot.pick(myToken)));
+
+    }
+
+    @Test
+    public void should_able_to_park_car_when_another_car_picked_given_parking_lot_is_full() {
+        ParkingLot parkingLot = new ParkingLot(1);
 
         Integer token = null;
-        for (int i = 0; i < ParkingLot.Max_Capicity; i++) {
-            token = parkingLot.parking(new Car());
-        }
+        token = parkingLot.parking(new Car());
         parkingLot.pick(token);
 
         Car car = new Car();
@@ -72,12 +82,25 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void should_not_able_to_pick_up_car_with_invalid_token() throws Exception {
-        ParkingLot parkingLot = new ParkingLot();
+    public void should_not_able_to_pick_up_car_when_I_not_park_a_car() {
+        ParkingLot parkingLot = new ParkingLot(100);
 
-        Integer token = parkingLot.parking(new Car());
-        Integer invalidTOken = token - 1;
+        Integer token = 2313;
 
-        assertNull(parkingLot.pick(invalidTOken));
+        assertNull(parkingLot.pick(token));
     }
+
+    @Test
+    public void should_not_able_to_pick_up_car_twice_when_I_park_a_car_once() {
+        ParkingLot parkingLot = new ParkingLot(100);
+
+        Car car = new Car();
+        Integer myToken = parkingLot.parking(car);
+
+        assertThat(car, sameInstance(parkingLot.pick(myToken)));
+
+        assertNull(parkingLot.pick(myToken));
+    }
+
+
 }
