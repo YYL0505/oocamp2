@@ -1,16 +1,32 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class ParkingBoy {
 
-    private  ParkingLot parkingLot;
+    private  List<ParkingLot> parkingLots = new ArrayList<ParkingLot>();
 
-    public ParkingBoy(ParkingLot parkingLot) {
-        this.parkingLot = parkingLot;
+    public ParkingBoy(List<ParkingLot> parkingLots) {
+        this.parkingLots.addAll(parkingLots);
     }
 
-    public Integer parking(Car car) {
-        return parkingLot.parking(car);
+    public Long parking(Car car) {
+        for (ParkingLot parkingLot : parkingLots) {
+            if (!parkingLot.isFull()) {
+                return parkingLot.parking(car);
+            }
+        }
+        return null;
     }
 
-    public Car pick(Integer token) {
-        return parkingLot.pick(token);
+    public Car pick(Long token) {
+        Car car = new Car();
+
+        for (ParkingLot parkingLot : parkingLots) {
+            car = parkingLot.pick(token);
+            if (null != car) {
+                break;
+            }
+        }
+        return car;
     }
 }
