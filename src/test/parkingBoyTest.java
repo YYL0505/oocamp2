@@ -8,109 +8,99 @@ import static org.hamcrest.core.IsSame.sameInstance;
 public class parkingBoyTest {
 
     @Test
-    public void should_able_to_pick_up_car_byParking_boy_when_parking_boy_parking_car_given_there_is_one_parking_lot() {
+    public void should_able_to_park_car_given_there_is_one_parking_lot() {
         ParkingLot parkingLot = new ParkingLot();
         ParkingBoy parkingBoy = new ParkingBoy(asList(parkingLot));
-
         Car car = new Car();
+
         Long token = parkingBoy.parking(car);
 
-        Car pickedCar = parkingBoy.pick(token);
-
-        assertThat(pickedCar, sameInstance(car));
+        assertThat(car, sameInstance(parkingLot.pick(token)));
     }
 
     @Test
-    public void should_able_to_pick_up_car_when_parking_boy_parking_car_given_there_is_one_parking_lot() {
+    public void should_able_to_pick_up_car_given_there_is_one_parking_lot() {
         ParkingLot parkingLot = new ParkingLot();
         ParkingBoy parkingBoy = new ParkingBoy(asList(parkingLot));
-
         Car car = new Car();
-        Long token = parkingBoy.parking(car);
 
-        Car pickedCar = parkingLot.pick(token);
-        assertThat(pickedCar, sameInstance(car));
-    }
-
-    @Test
-    public void should_able_to_pick_up_car_by_parking_boy_when_I_parking_car_given_there_is_one_parking_lot() {
-        ParkingLot parkingLot = new ParkingLot();
-        ParkingBoy parkingBoy = new ParkingBoy(asList(parkingLot));
-
-        Car car = new Car();
         Long token = parkingLot.parking(car);
 
-        Car pickedCar = parkingBoy.pick(token);
-        assertThat(pickedCar, sameInstance(car));
+        assertThat(car, sameInstance(parkingBoy.pick(token)));
     }
 
     @Test
-    public void should_able_to_pick_up_car_by_parking_boy_when_parking_boy_parking_car_given_there_are_multiple_parking_lots() {
+    public void should_able_to_park_car_to_first_space_when_there_is_space_given_there_are_multiple_parking_lots() {
+        ParkingLot firstParkingLot = new ParkingLot(1);
+        ParkingLot secondParkingLot = new ParkingLot(1);
+        ParkingBoy parkingBoy = new ParkingBoy(asList(firstParkingLot, secondParkingLot));
+        Car car = new Car();
+
+        Long token = parkingBoy.parking(car);
+
+        assertThat(car, sameInstance(firstParkingLot.pick(token)));
+    }
+
+    @Test
+    public void should_able_to_park_car_to_second_space_when_there_is_space_in_first_one_given_there_are_multiple_parking_lots() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         ParkingBoy parkingBoy = new ParkingBoy(asList(firstParkingLot, secondParkingLot));
         parkingBoy.parking(new Car());
-
         Car car = new Car();
+
         Long token = parkingBoy.parking(car);
 
-        Car pickedCar = parkingBoy.pick(token);
-        assertThat(pickedCar, sameInstance(car));
+        assertThat(car, sameInstance(secondParkingLot.pick(token)));
     }
 
     @Test
-    public void should_able_to_pick_up_car_by_parking_boy_when_I_parking_car_given_there_are_multiple_parking_lots() {
+    public void should_able_to_pick_up_car_given_there_are_multiple_parking_lots() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         ParkingBoy parkingBoy = new ParkingBoy(asList(firstParkingLot, secondParkingLot));
-        firstParkingLot.parking(new Car());
-
         Car car = new Car();
+
         Long token = secondParkingLot.parking(car);
 
-        Car pickedCar = parkingBoy.pick(token);
-        assertThat(pickedCar, sameInstance(car));
+        assertThat(car, sameInstance(parkingBoy.pick(token)));
     }
 
     @Test
-    public void should_able_to_pick_up_car_when_parking_boy_parking_car_given_there_are_multiple_parking_lots() {
+    public void should_not_able_to_pick_up_car_twice_given_there_are_multiple_parking_lots() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         ParkingBoy parkingBoy = new ParkingBoy(asList(firstParkingLot, secondParkingLot));
-        firstParkingLot.parking(new Car());
-
         Car car = new Car();
+
         Long token = parkingBoy.parking(car);
 
-        Car pickedCar = secondParkingLot.pick(token);
-        assertThat(pickedCar, sameInstance(car));
+        assertThat(car, sameInstance(parkingBoy.pick(token)));
+        assertNull(parkingBoy.pick(token));
     }
 
     @Test
-    public void should_not_able_to_pick_up_car_from_other_lot_when_parking_boy_parking_car_given_there_are_multiple_parking_lots() {
+    public void should_not_able_to_pick_up_car_when_never_park_it_given_there_are_multiple_parking_lots() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         ParkingBoy parkingBoy = new ParkingBoy(asList(firstParkingLot, secondParkingLot));
-        firstParkingLot.parking(new Car());
 
-        Car car = new Car();
-        Long token = parkingBoy.parking(car);
+        Long token = 1233L;
 
-        assertNull(firstParkingLot.pick(token));
+        assertNull(parkingBoy.pick(token));
     }
 
     @Test
-    public void should_not_able_to_pick_up_car_twice_when_parking_boy_parking_car_given_there_are_multiple_parking_lots() {
+    public void should_not_able_to_park_car_when_lot_are_full_given_there_are_multiple_parking_lots() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(1);
         ParkingBoy parkingBoy = new ParkingBoy(asList(firstParkingLot, secondParkingLot));
-        firstParkingLot.parking(new Car());
-
+        parkingBoy.parking(new Car());
+        parkingBoy.parking(new Car());
         Car car = new Car();
+
         Long token = parkingBoy.parking(car);
 
-        Car pickedCar = secondParkingLot.pick(token);
-        assertThat(pickedCar, sameInstance(car));
-        assertNull(secondParkingLot.pick(token));
+        assertNull(parkingBoy.pick(token));
     }
 }

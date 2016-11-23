@@ -19,7 +19,7 @@ public class ParkingBoy {
     }
 
     public Car pick(Long token) {
-        Car car = new Car();
+        Car car = null;
 
         for (ParkingLot parkingLot : parkingLots) {
             car = parkingLot.pick(token);
