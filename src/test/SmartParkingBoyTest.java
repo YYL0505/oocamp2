@@ -29,18 +29,6 @@ public class SmartParkingBoyTest {
     }
 
     @Test
-    public void should_fail_to_park_when_park_lot_is_full_given_there_is_a_park_lot() {
-        ParkingLot parkingLot = new ParkingLot(1);
-        SmartParkingBoy smartParkingBoy = new SmartParkingBoy(asList(parkingLot));
-        smartParkingBoy.park(new Car());
-        Car car = new Car();
-
-        Long token = smartParkingBoy.park(car);
-
-        assertNull(smartParkingBoy.pick(token));
-    }
-
-    @Test
     public void should_able_to_park_car_to_lot_whose_space_is_more_given_there_are_two_park_lot() {
         ParkingLot firstParkingLot = new ParkingLot(1);
         ParkingLot secondParkingLot = new ParkingLot(2);
@@ -89,8 +77,8 @@ public class SmartParkingBoyTest {
 
     @Test
     public void should_fail_to_pick_a_car_twice_when_park_it_once() {
-        ParkingLot firstParkingLot = new ParkingLot(2);
-        ParkingLot secondParkingLot = new ParkingLot(2);
+        ParkingLot firstParkingLot = new ParkingLot(1);
+        ParkingLot secondParkingLot = new ParkingLot(1);
         SmartParkingBoy smartParkingBoy = new SmartParkingBoy(asList(firstParkingLot, secondParkingLot));
         Car car = new Car();
 
@@ -99,4 +87,19 @@ public class SmartParkingBoyTest {
         assertThat(car, sameInstance(smartParkingBoy.pick(token)));
         assertNull(smartParkingBoy.pick(token));
     }
+
+    @Test
+    public void should_fail_to_park_when_park_lot_is_full_() {
+        ParkingLot firstParkingLot = new ParkingLot(1);
+        ParkingLot secondParkingLot = new ParkingLot(1);
+        SmartParkingBoy smartParkingBoy = new SmartParkingBoy(asList(firstParkingLot, secondParkingLot));
+        smartParkingBoy.park(new Car());
+        smartParkingBoy.park(new Car());
+        Car car = new Car();
+
+        Long token = smartParkingBoy.park(car);
+
+        assertNull(smartParkingBoy.pick(token));
+    }
+
 }
