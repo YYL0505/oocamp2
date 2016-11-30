@@ -40,4 +40,8 @@ public class ParkingLot {
     public int getSpace() {
         return maxCapacity - count;
     }
+
+    public double vacancyRate() {
+        return ((double) (maxCapacity - count)) / ((double) maxCapacity);
+    }
 }
